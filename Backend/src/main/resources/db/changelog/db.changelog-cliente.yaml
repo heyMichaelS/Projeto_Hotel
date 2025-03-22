@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: analeal
+      changes:
+        - createTable:
+            tableName: cliente
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: nome
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cpf
+                  type: varchar(14)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: telefone
+                  type: varchar(20)
+              - column:
+                  name: email
+                  type: varchar(100)
+              - column:
+                  name: data_cadastro
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: usuario_id
+                  type: int
+                  constraints:
+                    nullable: true
+                    unique: true
+
+  - changeSet:
+      id: 4
+      author: analeal
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: cliente
+            baseColumnNames: usuario_id
+            constraintName: fk_usuario_cliente
+            referencedTableName: usuario
+            referencedColumnNames: id
+            onDelete: CASCADE

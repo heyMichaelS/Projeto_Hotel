@@ -19,7 +19,7 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
               - column:
-                  name: cliente_id
+                  name: usuario_id
                   type: int
                   constraints:
                     nullable: false
@@ -56,9 +56,9 @@ databaseChangeLog:
       changes:
         - addForeignKeyConstraint:
             baseTableName: reserva
-            baseColumnNames: cliente_id
-            constraintName: fk_reserva_cliente
-            referencedTableName: cliente
+            baseColumnNames: usuario_id
+            constraintName: fk_reserva_usuario
+            referencedTableName: usuario
             referencedColumnNames: id
             onDelete: CASCADE
 
@@ -81,9 +81,10 @@ databaseChangeLog:
         - addForeignKeyConstraint:
             baseTableName: reserva
             baseColumnNames: atualizado_por
-            constraintName: fk_reserva_usuario
+            constraintName: fk_reserva_atualizado_por
             referencedTableName: usuario
             referencedColumnNames: id
+
 
   - changeSet:
       id: 6

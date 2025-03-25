@@ -2,7 +2,12 @@ package com.br.hotelEase.entity;
 
 
 import com.br.hotelEase.enuns.TipoUsuario;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -16,22 +21,36 @@ public class Usuario {
 
     private String nome;
 
+    @Email
+    @NotBlank
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(name = "senha", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotBlank
+    @Column(nullable = false)
     private String senha;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_usuario", nullable = false)
     private TipoUsuario tipoUsuario;
 
-    @Column(name = "data_criacao")
-    private LocalDateTime dataCriacao = LocalDateTime.now();
+    @NotBlank
+    @Size(max = 14)
+    @Pattern(regexp = "\\d{11}|\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "cliente.cpfPattern")
+    @Column(nullable = false, unique = true)
+    private String cpf;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private Cliente cliente;
+    @Pattern(regexp = "\\(?\\d{2}\\)?\\s?9?\\d{4}-\\d{4}", message = "cliente.telefone")
+    private String telefone;
 
+    @Column(name = "data_criacao", updatable = false)
+    private LocalDateTime dataCriacao;
+
+    @PrePersist
+    public void prePersist() {
+        this.dataCriacao = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;
@@ -49,19 +68,19 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public String getEmail() {
+    public @Email @NotBlank String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@Email @NotBlank String email) {
         this.email = email;
     }
 
-    public String getsenha() {
+    public @NotBlank String getSenha() {
         return senha;
     }
 
-    public void setsenha(String senha) {
+    public void setSenha(@NotBlank String senha) {
         this.senha = senha;
     }
 
@@ -81,11 +100,19 @@ public class Usuario {
         this.dataCriacao = dataCriacao;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public @NotBlank @Size(max = 14) @Pattern(regexp = "\\d{11}|\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "cliente.cpfPattern") String getCpf() {
+        return cpf;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setCpf(@NotBlank @Size(max = 14) @Pattern(regexp = "\\d{11}|\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}", message = "cliente.cpfPattern") String cpf) {
+        this.cpf = cpf;
+    }
+
+    public @Pattern(regexp = "\\(?\\d{2}\\)?\\s?9?\\d{4}-\\d{4}", message = "cliente.telefone") String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(@Pattern(regexp = "\\(?\\d{2}\\)?\\s?9?\\d{4}-\\d{4}", message = "cliente.telefone") String telefone) {
+        this.telefone = telefone;
     }
 }

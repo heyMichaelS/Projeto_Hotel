@@ -39,6 +39,15 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: cpf
+                  type: varchar(14)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: telefone
+                  type: varchar(20)
+              - column:
                   name: data_criacao
                   type: timestamp
                   defaultValueComputed: CURRENT_TIMESTAMP
